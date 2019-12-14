@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: distribution
+#  profiles:
+#    active: local
+  cloud:
+    nacos:
+      config:
+        file-extension: yaml
+        server-addr: 127.0.0.1:8848
+        prefix: distribution
+
+#nacos:
+#  config:
+#    server-addr: 127.0.0.1:8848
+#  discovery:
+#    server-addr: 127.0.0.1:8848

@@ -1,0 +1,175 @@
+package com.mw.distribution.wxpay.util;
+
+
+
+import com.mw.distribution.wxpay.exception.UncheckedException;
+import com.mw.distribution.wxpay.pojo.base.BasePayResponse;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.security.Security;
+import java.util.Base64;
+import java.util.zip.GZIPInputStream;
+
+/**
+ * 微信支付工具类.
+ *
+ */
+public class CodecUtils {
+
+    static {
+        // 对加解密中 PKCS7Padding 模式的支持
+        Security.addProvider(new BouncyCastleProvider());
+    }
+
+    private CodecUtils() { }
+
+    /**
+     * 解密，如：解密【退款结果通知】中的加密信息 req_info 字段.
+     *
+     * <p>解密步骤如下：
+     * <ul>
+     * <li>（1）对加密串A做base64解码，得到加密串B</li>
+     * <li>（2）对商户mckKey做md5，得到32位小写key</li>
+     * <li>（3）用key对加密串B做AES-256-ECB解密（PKCS7Padding）</li>
+     * </ul>
+     *
+     * @param str 待解密的密文
+     * @param mchKey 商户秘钥
+     *
+     * @return 解密后的明文
+     */
+    public static String decrypt(final String str, final String mchKey) {
+        final byte[] decode = Base64.getDecoder().decode(str);
+        final String keyStr = DigestUtils.md5Hex(mchKey);
+
+        try {
+            final Key key = new SecretKeySpec(keyStr.getBytes(StandardCharsets.UTF_8), "AES");
+            final Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
+            cipher.init(Cipher.DECRYPT_MODE, key);
+            final byte[] bytes = cipher.doFinal(decode);
+            return new String(bytes, StandardCharsets.UTF_8);
+        }
+        catch (final NoSuchAlgorithmException | InvalidKeyException
+                | BadPaddingException | NoSuchPaddingException
+                | IllegalBlockSizeException e) {
+            throw new UncheckedException("Decrypt fail", e);
+        }
+    }
+
+    /**
+     * Gzip解压数据.
+     *
+     * @param data the data
+     *
+     * @return 解压后的数据
+     */
+    public static byte[] unCompress(final byte[] data) {
+        if (data == null || data.length == 0) {
+            return data;
+        }
+        try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
+             final ByteArrayInputStream in = new ByteArrayInputStream(data);
+             final GZIPInputStream gzip = new GZIPInputStream(in)) {
+
+            final byte[] buffer = new byte[256];
+            int n;
+            while ((n = gzip.read(buffer)) >= 0) {
+                out.write(buffer, 0, n);
+            }
+            return out.toByteArray();
+        }
+        catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * jaxb Object to xml String.
+     *
+     * @param obj Object
+     *
+     * @return xml String
+     */
+    public static String marshal(final Object obj) {
+        try {
+            final JAXBContext context = JAXBContext.newInstance(obj.getClass());
+            final Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+
+            final StringWriter writer = new StringWriter();
+            marshaller.marshal(obj, writer);
+            return writer.toString();
+        }
+        catch (final JAXBException e) {
+            throw new UncheckedException(e);
+        }
+    }
+
+    /**
+     * jaxb xml 转 pojo.
+     *
+     * @param <T> the pojo type
+     * @param xmlStr the xml str
+     * @param clazz the clazz
+     *
+     * @return the pojo
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T unmarshal(final String xmlStr, final Class<T> clazz) {
+        try {
+            final JAXBContext context = JAXBContext.newInstance(clazz);
+            final XMLInputFactory xif = XMLInputFactory.newFactory();
+            xif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+            xif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+            final XMLStreamReader xsr = xif.createXMLStreamReader(new StringReader(xmlStr));
+
+            final Unmarshaller unmarshaller = context.createUnmarshaller();
+            final T response = (T) unmarshaller.unmarshal(xsr);
+            if (response instanceof BasePayResponse) {
+                ((BasePayResponse) response).processResponse();
+            }
+            return response;
+        }
+        catch (final JAXBException | XMLStreamException e) {
+            throw new UncheckedException(e);
+        }
+
+    }
+
+
+    /**
+     * 判断数据是否为 GZIP 压缩数据, 【下载对账单】微信不会对异常信息进行 GZIP, 但对正常的结果会进行 GZIP（如果请求中声明了）.
+     *
+     * @param bytes data
+     *
+     * @return isCompressed
+     */
+    public static boolean isCompressed(final byte[] bytes) {
+        if ((bytes == null) || (bytes.length < 2)) {
+            return false;
+        }
+        else {
+            return ((bytes[0] == (byte) (GZIPInputStream.GZIP_MAGIC))
+                    && (bytes[1] == (byte) (GZIPInputStream.GZIP_MAGIC >> 8)));
+        }
+    }
+
+}
