@@ -2,11 +2,10 @@ spring:
   application:
     name: distribution
   profiles:
-    active: dev
+    active: local
   cloud:
     nacos:
       config:
-        namespace: ad9ecf86-15f8-42be-8329-93caa3ec7076
         file-extension: yaml
         server-addr: 192.168.123.10:8848
         ext-config:

@@ -108,13 +108,24 @@ spec:
                   resource: limits.cpu
             - name: JAVA_OPTS
               value: >-
-                -Xms4096m -Xmx4096m -XX:NewRatio=4 -XX:MetaspaceSize=256M
-                -XX:MaxMetaspaceSize=256M -XX:+DisableExplicitGC -XX:+UseConcMarkSweepGC
-                -XX:+CMSParallelInitialMarkEnabled -XX:+CMSParallelRemarkEnabled
-                -XX:+UseFastAccessorMethods -XX:+UseCMSInitiatingOccupancyOnly
-                -XX:CMSInitiatingOccupancyFraction=80 -XX:+HeapDumpOnOutOfMemoryError
-                -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Shanghai
-                -Djava.security.egd=file:/dev/./urandom -Ddubbo.protocol.port=20880
+                -Xms4096m
+                -Xmx4096m
+                -XX:NewRatio=4
+                -XX:MetaspaceSize=256M
+                -XX:MaxMetaspaceSize=256M
+                -XX:+DisableExplicitGC
+                -XX:+UseConcMarkSweepGC
+                -XX:+CMSParallelInitialMarkEnabled
+                -XX:+CMSParallelRemarkEnabled
+                -XX:+UseFastAccessorMethods
+                -XX:+UseCMSInitiatingOccupancyOnly
+                -XX:CMSInitiatingOccupancyFraction=80
+                -XX:+HeapDumpOnOutOfMemoryError
+                -Dfile.encoding=UTF-8
+                -Duser.timezone=Asia/Shanghai
+                -Djava.security.egd=file:/dev/./urandom
+                -Dspring.profiles.active=dev
+                -Dspring.cloud.nacos.config.namespace=ad9ecf86-15f8-42be-8329-93caa3ec7076
           volumeMounts:
             - name: app-logs
               mountPath: /logs
