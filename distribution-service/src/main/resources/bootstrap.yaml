@@ -1,14 +1,13 @@
 spring:
   application:
     name: distribution
-#  profiles:
-#    active: local
+  profiles:
+    active: local
   cloud:
     nacos:
       config:
         file-extension: yaml
-        server-addr: 127.0.0.1:8848
-        prefix: distribution
+        server-addr: 192.168.123.10:8848
 
 #nacos:
 #  config:
