@@ -36,6 +36,9 @@ public class ExampleController {
     @Value("${useLocalCache:false}")
     private boolean useLocalCache;
 
+    @Value("${foo:null}")
+    private String foo;
+
 //    @NacosInjected
 //    private NamingService namingService;
 
@@ -45,6 +48,11 @@ public class ExampleController {
     @GetMapping("/nacos")
     public boolean nacos() {
         return this.useLocalCache;
+    }
+
+    @GetMapping("/foo")
+    public String foo() {
+        return foo;
     }
 
 //    @RequestMapping(value = "/get", method = GET)
