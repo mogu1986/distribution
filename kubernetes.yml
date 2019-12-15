@@ -11,7 +11,7 @@ metadata:
     kubernetes.io/ingress.class: 'nginx'
 spec:
   rules:
-  - host: distribution.shixh.com
+  - host: distribution.jq.cn
     http:
       paths:
       - path: /
@@ -76,14 +76,12 @@ spec:
       labels:
         app: distribution
     spec:
-#      imagePullSecrets:
-#        - name: qcloudregistrykey
-#        - name: tencenthubkey
+      imagePullSecrets:
+        - name: harbor
       containers:
         - name: distribution
           imagePullPolicy: IfNotPresent
-#          image: ccr.ccs.tencentyun.com/sxhharbor/distribution:67
-          image: harbor.shixhlocal.com/library/distribution:5
+          image: harbor.jq.cn/library/distribution:22
           resources:
             limits:
               cpu: 0.3
