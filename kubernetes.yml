@@ -81,22 +81,22 @@ spec:
       containers:
         - name: distribution
           imagePullPolicy: IfNotPresent
-          image: harbor.jq.cn/library/distribution:22
+          image: harbor.jq.cn/library/distribution:60
           resources:
             limits:
               cpu: 0.3
               memory: 1000Mi
-          livenessProbe:
-            failureThreshold: 8
-            httpGet:
-              path: /k8s/health
-              port: 8080
-              httpHeaders:
-                - name: X-Custom-Header
-                  value: jim
-            initialDelaySeconds: 60
-            timeoutSeconds: 3
-            periodSeconds: 5
+#          livenessProbe:
+#            failureThreshold: 8
+#            httpGet:
+#              path: /k8s/health
+#              port: 8080
+#              httpHeaders:
+#                - name: X-Custom-Header
+#                  value: jim
+#            initialDelaySeconds: 60
+#            timeoutSeconds: 3
+#            periodSeconds: 5
           ports:
             - containerPort: 8080
 #          args:
@@ -126,6 +126,7 @@ spec:
                 -Djava.security.egd=file:/dev/./urandom
                 -Dspring.profiles.active=dev
                 -Dspring.cloud.nacos.config.namespace=ad9ecf86-15f8-42be-8329-93caa3ec7076
+                -Dspring.cloud.nacos.discovery.namespace=ad9ecf86-15f8-42be-8329-93caa3ec7076
           volumeMounts:
             - name: app-logs
               mountPath: /logs
