@@ -14,3 +14,4 @@ spring:
             refresh: true
       discovery:
         server-addr: ${spring.cloud.nacos.config.server-addr}
+        namespace: ${spring.cloud.nacos.config.namespace}

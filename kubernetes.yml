@@ -81,7 +81,7 @@ spec:
       containers:
         - name: distribution
           imagePullPolicy: IfNotPresent
-          image: harbor.jq.cn/library/distribution:60
+          image: harbor.jq.cn/library/distribution:62
           resources:
             limits:
               cpu: 0.3
@@ -125,8 +125,8 @@ spec:
                 -Duser.timezone=Asia/Shanghai
                 -Djava.security.egd=file:/dev/./urandom
                 -Dspring.profiles.active=dev
-                -Dspring.cloud.nacos.config.namespace=ad9ecf86-15f8-42be-8329-93caa3ec7076
-                -Dspring.cloud.nacos.discovery.namespace=ad9ecf86-15f8-42be-8329-93caa3ec7076
+                -Dspring.cloud.nacos.config.server-addr=nacos:8848
+                -Dspring.cloud.nacos.config.namespace=a1a8ab7b-7299-44b6-8e76-13e3db762eef
           volumeMounts:
             - name: app-logs
               mountPath: /logs
