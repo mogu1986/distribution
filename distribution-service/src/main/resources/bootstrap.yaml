@@ -7,11 +7,12 @@ spring:
     nacos:
       config:
         file-extension: yaml
-        server-addr: 192.168.123.10:8848
-        ext-config:
-          - data-id: app.yaml
-            group: multi-data-ids
-            refresh: true
+        server-addr: nacos.jq.cn:80
+#        ext-config:
+#          - data-id: app.yaml
+#            group: multi-data-ids
+#            refresh: true
+        shared-dataids: app.yaml
       discovery:
         server-addr: ${spring.cloud.nacos.config.server-addr}
         namespace: ${spring.cloud.nacos.config.namespace}
