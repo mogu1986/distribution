@@ -1,23 +1,16 @@
 package com.mw.distribution.controller;
 
-import com.alibaba.nacos.api.annotation.NacosInjected;
-import com.alibaba.nacos.api.exception.NacosException;
-import com.alibaba.nacos.api.naming.NamingService;
-import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.mw.distribution.service.ExampleInnerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -42,9 +35,6 @@ public class ExampleController {
 
     @Value("${foo:null}")
     private String foo;
-
-    @NacosInjected
-    private NamingService namingService;
 
     @Resource
     ExampleInnerService exampleInnerService;
@@ -71,12 +61,6 @@ public class ExampleController {
     @GetMapping("/foo")
     public String foo() {
         return foo;
-    }
-
-    @RequestMapping(value = "/get", method = GET)
-    @ResponseBody
-    public List<Instance> get(@RequestParam String serviceName) throws NacosException {
-        return namingService.getAllInstances(serviceName);
     }
 
     @GetMapping("/hello")
