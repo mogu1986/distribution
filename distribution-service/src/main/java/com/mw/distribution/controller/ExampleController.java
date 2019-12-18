@@ -45,12 +45,7 @@ public class ExampleController {
 
     @RequestMapping(value = "/echo/{string}", method = GET)
     public String echo(@PathVariable String string) {
-        return "Hello Nacos Discovery " + string;
-    }
-
-    @RequestMapping(value = "/exec/{str}", method = GET)
-    public String exec(@PathVariable String str) {
-        return restTemplate.getForObject("http://distribution/echo/" + str, String.class);
+        return "Distribution, Hello Nacos Discovery " + string;
     }
 
     @GetMapping("/nacos")
