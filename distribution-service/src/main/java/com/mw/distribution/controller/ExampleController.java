@@ -1,5 +1,6 @@
 package com.mw.distribution.controller;
 
+import com.mw.distribution.api.ExampleApi;
 import com.mw.distribution.service.ExampleInnerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @Slf4j
 @RestController
 @RefreshScope
-public class ExampleController {
+public class ExampleController implements ExampleApi {
 
     @Value("${timeout:100}")
     private int timeout;
@@ -42,10 +43,9 @@ public class ExampleController {
     @Autowired
     private RestTemplate restTemplate;
 
-
-    @RequestMapping(value = "/echo/{string}", method = GET)
-    public String echo(@PathVariable String string) {
-        return "Distribution, Hello Nacos Discovery " + string;
+    @Override
+    public String echo(@RequestParam String string) {
+        return exampleInnerService.echo(string);
     }
 
     @GetMapping("/nacos")
