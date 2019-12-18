@@ -41,11 +41,9 @@ public class ExampleController implements ExampleApi {
     @Resource
     ExampleInnerService exampleInnerService;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     @Override
     public String echo(@RequestParam String echo) {
+        log.info("feign 调用的哦 {}", echo);
         return exampleInnerService.echo(echo);
     }
 
