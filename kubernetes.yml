@@ -125,8 +125,7 @@ spec:
                 -Duser.timezone=Asia/Shanghai
                 -Djava.security.egd=file:/dev/./urandom
                 -Dspring.profiles.active=dev
-                -Dspring.cloud.nacos.config.server-addr=nacos:8848
-                -Dspring.cloud.nacos.config.namespace=a1a8ab7b-7299-44b6-8e76-13e3db762eef
+                -Dspring.cloud.nacos.config.namespace=ad9ecf86-15f8-42be-8329-93caa3ec7076
           volumeMounts:
             - name: app-logs
               mountPath: /logs
