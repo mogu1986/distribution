@@ -21,7 +21,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  * @Author: jim
  */
 @Slf4j
-@RestController("/inner/distribution/example")
+@RestController
+@RequestMapping(value = "/inner/distribution/example")
 @RefreshScope
 public class ExampleController implements ExampleApi {
 
@@ -44,8 +45,8 @@ public class ExampleController implements ExampleApi {
     private RestTemplate restTemplate;
 
     @Override
-    public String echo(@RequestParam String string) {
-        return exampleInnerService.echo(string);
+    public String echo(@RequestParam String echo) {
+        return exampleInnerService.echo(echo);
     }
 
     @GetMapping("/nacos")
