@@ -1,6 +1,7 @@
 package com.mw.distribution.api;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -17,6 +18,7 @@ public interface ExampleApi {
      * @date: 2019-04-23 16:14
      * @return String
      */
+    @GetMapping(value = "echo")
     String echo(@RequestParam String echo);
 
 }
