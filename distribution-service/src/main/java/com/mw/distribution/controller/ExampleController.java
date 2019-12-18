@@ -21,7 +21,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  * @Author: jim
  */
 @Slf4j
-@RestController
+@RestController("/inner/distribution/example")
 @RefreshScope
 public class ExampleController implements ExampleApi {
 
