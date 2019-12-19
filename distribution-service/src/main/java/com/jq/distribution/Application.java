@@ -1,5 +1,6 @@
 package com.jq.distribution;
 
+import com.jq.boot.feign.FeignConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +14,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Author: jim
  */
 @Slf4j
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"com.jq"}, defaultConfiguration= FeignConfig.class)
 @EnableDiscoveryClient
 @SpringBootApplication
 public class Application {
