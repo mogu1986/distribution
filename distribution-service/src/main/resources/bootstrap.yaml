@@ -10,10 +10,10 @@ spring:
         server-addr: 192.168.123.10:8848
         ext-config:
           - data-id: common.yaml
-            group: common
+            group: ops
             refresh: true
           - data-id: sentinel.yaml
-            group: sentinel
+            group: ops
             refresh: true
       discovery:
         server-addr: ${spring.cloud.nacos.config.server-addr}
