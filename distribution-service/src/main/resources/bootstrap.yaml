@@ -15,5 +15,5 @@ spring:
           - data-id: sentinel.yaml
             group: ops
             refresh: true
-      discovery:
-        server-addr: ${spring.cloud.nacos.config.server-addr}
+#      discovery:
+#        server-addr: ${spring.cloud.nacos.config.server-addr}
