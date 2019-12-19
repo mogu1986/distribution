@@ -9,8 +9,11 @@ spring:
         file-extension: yaml
         server-addr: 192.168.123.10:8848
         ext-config:
-          - data-id: app.yaml
-            group: multi-data-ids
+          - data-id: common.yaml
+            group: common
+            refresh: true
+          - data-id: sentinel.yaml
+            group: sentinel
             refresh: true
       discovery:
         server-addr: ${spring.cloud.nacos.config.server-addr}

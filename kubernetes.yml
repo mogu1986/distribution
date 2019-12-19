@@ -81,7 +81,7 @@ spec:
       containers:
         - name: distribution
           imagePullPolicy: IfNotPresent
-          image: harbor.jq.cn/library/distribution:62
+          image: harbor.jq.cn/library/distribution:85
           resources:
             limits:
               cpu: 0.3
