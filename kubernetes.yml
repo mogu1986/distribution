@@ -126,6 +126,7 @@ spec:
                 -Djava.security.egd=file:/dev/./urandom
                 -Dspring.profiles.active=dev
                 -Dspring.cloud.nacos.config.namespace=ad9ecf86-15f8-42be-8329-93caa3ec7076
+                -Dspring.cloud.nacos.discovery.namespace=ad9ecf86-15f8-42be-8329-93caa3ec7076
           volumeMounts:
             - name: app-logs
               mountPath: /logs
