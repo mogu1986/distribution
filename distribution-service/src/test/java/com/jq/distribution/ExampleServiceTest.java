@@ -1,7 +1,7 @@
-package com.mw.distribution;
+package com.jq.distribution;
 
 
-import com.mw.distribution.service.ExampleInnerService;
+import com.jq.distribution.service.ExampleInnerService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package com.mw.distribution.api;
+package com.jq.distribution.api;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

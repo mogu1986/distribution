@@ -1,6 +1,6 @@
-package com.mw.distribution.service;
+package com.jq.distribution.service;
 
-import com.mw.distribution.api.ExampleApi;
+import com.jq.distribution.api.ExampleApi;
 
 /**
  * @Description: mybatis-plush 配置类

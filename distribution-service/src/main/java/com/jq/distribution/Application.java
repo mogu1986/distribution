@@ -1,13 +1,11 @@
-package com.mw.distribution;
+package com.jq.distribution;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * @Description: 启动类
@@ -15,15 +13,10 @@ import org.springframework.web.client.RestTemplate;
  * @Author: jim
  */
 @Slf4j
-@SpringBootApplication
+@EnableFeignClients
 @EnableDiscoveryClient
+@SpringBootApplication
 public class Application {
-
-    @LoadBalanced
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(Application.class).web(WebApplicationType.SERVLET).run(args);

@@ -1,19 +1,15 @@
-package com.mw.distribution.controller;
+package com.jq.distribution.controller;
 
-import com.mw.distribution.api.ExampleApi;
-import com.mw.distribution.service.ExampleInnerService;
+import com.jq.distribution.api.ExampleApi;
+import com.jq.distribution.service.ExampleInnerService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * @Description: Example 的 Feign 入口类

@@ -1,6 +1,6 @@
-package com.mw.distribution.service.impl;
+package com.jq.distribution.service.impl;
 
-import com.mw.distribution.service.ExampleInnerService;
+import com.jq.distribution.service.ExampleInnerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

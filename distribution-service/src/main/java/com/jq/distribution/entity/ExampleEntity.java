@@ -1,4 +1,4 @@
-package com.mw.distribution.entity;
+package com.jq.distribution.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

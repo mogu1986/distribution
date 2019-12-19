@@ -1,4 +1,4 @@
-package com.mw.distribution.exception;
+package com.jq.distribution.exception;
 
 /**
  * @Description: 断言异常辅助类
