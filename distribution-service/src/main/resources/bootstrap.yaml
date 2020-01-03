@@ -12,6 +12,6 @@ spring:
           - data-id: common.yaml
             group: ops
             refresh: true
-#          - data-id: sentinel.yaml
-#            group: ops
-#            refresh: true
+          - data-id: sentinel.yaml
+            group: ops
+            refresh: true
