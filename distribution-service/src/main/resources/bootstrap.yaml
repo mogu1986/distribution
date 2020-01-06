@@ -3,6 +3,9 @@ spring:
     name: distribution
   profiles:
     active: local
+  sleuth:
+    sampler:
+      probability: 1.0
   cloud:
     nacos:
       config:
@@ -15,3 +18,5 @@ spring:
           - data-id: sentinel.yaml
             group: ops
             refresh: true
+  zipkin:
+    base-url: http://zipkin.jq.cn

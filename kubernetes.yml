@@ -78,34 +78,46 @@ spec:
     spec:
       imagePullSecrets:
         - name: harbor
+      initContainers:
+        - image: harbor.jq.cn/library/skywalking-sidecar:6.5.0
+          name: sw-agent-sidecar
+          imagePullPolicy: IfNotPresent
+          command: ['sh']
+          args: ['-c','mkdir -p /skywalking/agent && cp -r /usr/skywalking/agent/* /skywalking/agent']
+          volumeMounts:
+            - mountPath: /skywalking/agent
+              name: sw-agent
+        - name: arthas-sidecar
+          image: hengyunabc/arthas:3.1.7-no-jdk
+          imagePullPolicy: IfNotPresent
+          command: ['sh']
+          args: ['-c','mkdir -p /arthas && cp -r /opt/arthas/* /arthas']
+          volumeMounts:
+            - mountPath: /arthas
+              name: arthas
       containers:
         - name: distribution
           imagePullPolicy: IfNotPresent
-          image: harbor.jq.cn/library/distribution:96
+          image: harbor.jq.cn/library/distribution:102
           resources:
             limits:
               cpu: 0.3
               memory: 1000Mi
-#          livenessProbe:
-#            failureThreshold: 8
-#            httpGet:
-#              path: /k8s/health
-#              port: 8080
-#              httpHeaders:
-#                - name: X-Custom-Header
-#                  value: jim
-#            initialDelaySeconds: 60
-#            timeoutSeconds: 3
-#            periodSeconds: 5
           ports:
             - containerPort: 8080
-#          args:
-#            - '--apollo.meta=http://apollo-svc.ops:8080'
           env:
             - name: PROCESSORS
               valueFrom:
                 resourceFieldRef:
                   resource: limits.cpu
+            - name: SW_AGENT_COLLECTOR_BACKEND_SERVICES
+              value: '192.168.123.10:11800'
+            - name: SW_AGENT_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['app']
+            - name: AGENT_OPTS
+              value: '-javaagent:/usr/skywalking/agent/skywalking-agent.jar'
             - name: JAVA_OPTS
               value: >-
                 -Xms4096m
@@ -130,43 +142,18 @@ spec:
           volumeMounts:
             - name: app-logs
               mountPath: /logs
-#            - name: apiclient
-#              mountPath: /opt/wxcert
-#        - name: filebeat
-#          image: docker.elastic.co/beats/filebeat:6.7.0
-#          imagePullPolicy: IfNotPresent
-#          args: [
-#            "-c", "/etc/filebeat.yml",
-#            "-e",
-#          ]
-#          env:
-#            - name: POD_IP
-#              valueFrom:
-#                fieldRef:
-#                  apiVersion: v1
-#                  fieldPath: status.podIP
-#            - name: ELASTICSEARCH_HOST
-#              value: "elasticsearch-client.log"
-#            - name: ELASTICSEARCH_PORT
-#              value: "9200"
-#          securityContext:
-#            runAsUser: 0
-#            privileged: true
-#          volumeMounts:
-#            - name: config
-#              mountPath: /etc/filebeat.yml
-#              subPath: filebeat.yml
-#              readOnly: true
-#            - name: app-logs
-#              mountPath: /logs
+            - name: sw-agent
+              mountPath: /usr/skywalking/agent
+            - name: arthas
+              mountPath: /opt/arthas
       volumes:
         - name: app-logs
+          emptyDir: {}
+        - name: sw-agent
+          emptyDir: {}
+        - name: arthas
           emptyDir: {}
         - name: config
           configMap:
             defaultMode: 0600
             name: distribution-filebeat-config
-#        - name: apiclient
-#          secret:
-#            defaultMode: 420
-#            secretName: apiclient
