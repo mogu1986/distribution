@@ -12,7 +12,7 @@
             console.log("您的浏览器不支持WebSocket");
         }else{
             console.log("您的浏览器支持WebSocket");
-            var socketUrl="http://http://distribution.jq.cn/imserver/"+$("#userId").val();
+            var socketUrl="http://distribution.jq.cn/imserver/"+$("#userId").val();
             socketUrl=socketUrl.replace("https","ws").replace("http","ws");
             console.log(socketUrl);
             if(socket!=null){
