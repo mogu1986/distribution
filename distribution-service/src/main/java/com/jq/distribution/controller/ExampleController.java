@@ -53,6 +53,12 @@ public class ExampleController implements ExampleApi {
         return foo;
     }
 
+    @GetMapping("/core")
+    public String core() {
+        int core = Runtime.getRuntime().availableProcessors();
+        return String.valueOf(core);
+    }
+
     @GetMapping("/hello")
     public String hello() {
         log.info("[hello]");
