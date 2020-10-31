@@ -1,33 +1,13 @@
 spring:
   application:
     name: distribution
-  freemarker:
-    request-context-attribute: request
-    suffix: .html
-    content-type: text/html
-    enabled: true
-    cache: false
-    charset: UTF-8
-    allow-request-override: false
-    expose-request-attributes: true
-    expose-session-attributes: true
-    expose-spring-macro-helpers: true
   profiles:
     active: local
-  sleuth:
-    sampler:
-      probability: 1.0
   cloud:
     nacos:
-      config:
-        file-extension: yaml
-        server-addr: 192.168.123.176:8848
-        ext-config:
-          - data-id: common.yaml
-            group: ops
-            refresh: true
-          - data-id: sentinel.yaml
-            group: ops
-            refresh: true
-  zipkin:
-    base-url: http://zipkin.jq.cn
+      discovery:
+        server-addr: 192.168.10.200:8848
+
+feign:
+  logger:
+    level: full

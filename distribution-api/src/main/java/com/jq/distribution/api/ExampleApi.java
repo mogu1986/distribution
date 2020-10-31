@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @Date: 2019-04-23 16:14
  * @Author: jim
  */
-@FeignClient(value = "distribution",path = "/inner/distribution/example",url = "${feign-url.user:}")
+@FeignClient(value = "distribution",path = "/inner/distribution/example",url = "${feign-url.distribution:}")
 public interface ExampleApi {
 
     /**
