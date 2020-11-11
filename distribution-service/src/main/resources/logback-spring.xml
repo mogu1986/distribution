@@ -3,7 +3,7 @@
     <contextName>logback</contextName>
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
 
-    <property name="LOG_PATH" value="logs/logback.log"/>
+    <springProperty source="spring.logPath" name="LOG_PATH" scope="context" defaultValue="logs" />
     <property name="ENCODER_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS}|%highlight(%-5level)|%boldYellow(%thread)|%class|%method|%line|%cyan(%msg%n)"/>
 
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
@@ -15,15 +15,21 @@
     </appender>
 
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}</file>
+        <file>${LOG_PATH}/info.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>info-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>10MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>10</maxHistory>
+            <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <jsonFactoryDecorator class="net.logstash.logback.decorate.CharacterEscapesJsonFactoryDecorator">
+                <escape>
+                    <targetCharacterCode>10</targetCharacterCode>
+                    <escapeSequence>\u2028</escapeSequence>
+                </escape>
+            </jsonFactoryDecorator>
             <providers>
                 <timestamp>
                     <timeZone>UTC</timeZone>
@@ -36,7 +42,7 @@
                         "level": "%level",
                         "class": "%class",
                         "method": "%method",
-                        "line_number": "%line",
+                        "line": "%line",
                         "span": "%X{X-B3-SpanId:-}",
                         "parent": "%X{X-B3-ParentSpanId:-}",
                         "thread": "%thread",
@@ -49,10 +55,55 @@
         </encoder>
     </appender>
 
-    <root level="INFO">
-        <appender-ref ref="stdout"/>
-        <appender-ref ref="file"/>
-    </root>
+    <springProfile name="local">
+        <root level="INFO">
+            <appender-ref ref="stdout" />
+        </root>
+        <logger name="com.jq" level="DEBUG" additivity="false">
+            <appender-ref ref="stdout" />
+        </logger>
+        <logger name="com.alibaba.cloud.nacos" level="DEBUG" additivity="false">
+            <appender-ref ref="stdout" />
+        </logger>
+        <logger name="com.ctrip.framework.apollo" level="DEBUG" additivity="false">
+            <appender-ref ref="stdout" />
+        </logger>
+    </springProfile>
 
-    <logger name="com.jq" level="DEBUG"/>
+    <springProfile name="dev,test,uat">
+        <root level="INFO">
+            <appender-ref ref="stdout" />
+            <appender-ref ref="file" />
+        </root>
+        <logger name="com.jq" level="DEBUG" additivity="false">
+            <appender-ref ref="stdout" />
+            <appender-ref ref="file" />
+        </logger>
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="WARN">
+            <appender-ref ref="stdout" />
+            <appender-ref ref="file" />
+        </root>
+
+        <logger name="com.jq" level="WARN" additivity="false">
+            <appender-ref ref="stdout" />
+            <appender-ref ref="file" />
+        </logger>
+    </springProfile>
+
+    <!--    <if condition='property("spring.profiles.active").contains("prod")'>-->
+    <!--        <then>-->
+    <!--            <logger name="com.jq" level="WARN" additivity="false">-->
+    <!--                <appender-ref ref="file" />-->
+    <!--            </logger>-->
+    <!--        </then>-->
+    <!--        <else>-->
+    <!--            <logger name="com.jq" level="DEBUG" additivity="false">-->
+    <!--                <appender-ref ref="stdout" />-->
+    <!--            </logger>-->
+    <!--        </else>-->
+    <!--    </if>-->
+
 </configuration>
